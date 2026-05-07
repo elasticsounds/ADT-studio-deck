@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ADT Studio Beta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Type scale (1920x1080) */
+    --type-display: 116px;
+    --type-title: 72px;
+    --type-subtitle: 44px;
+    --type-body: 30px;
+    --type-small: 24px;
+    --type-mono: 22px;
+
+    /* Spacing */
+    --pad-top: 110px;
+    --pad-bottom: 96px;
+    --pad-x: 120px;
+    --gap-title: 56px;
+    --gap-item: 28px;
+
+    /* Colors — sampled from ADT Studio site */
+    --ink: #0E1530;
+    --ink-2: #2A3354;
+    --muted: #6B7493;
+    --line: #E3E8F4;
+    --bg: #F6F8FE;
+    --bg-2: #FFFFFF;
+    --blue: #2D5BFF;
+    --blue-deep: #1E3FB8;
+    --blue-soft: #E7EEFF;
+
+    /* Feature palette (matches site icons) */
+    --c-extract: #2D5BFF;     /* blue */
+    --c-storyboard: #8B5CF6;  /* purple */
+    --c-quizzes: #F97316;     /* orange */
+    --c-captions: #14B8A6;    /* teal */
+    --c-glossary: #84CC16;    /* lime */
+    --c-contents: #F59E0B;    /* amber */
+    --c-language: #EC4899;    /* pink */
+    --c-speech: #EF4444;      /* red */
+    --c-preview: #1F2937;     /* near-black */
+  }
+
+  html, body { margin: 0; padding: 0; background: #0a0a0a; }
+  body { font-family: 'Inter', system-ui, sans-serif; color: var(--ink); }
+
+  deck-stage section {
+    background: var(--bg);
+    color: var(--ink);
+    overflow: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Soft dotted grid bg used on hero & section heads */
+  .dotgrid {
+    background-color: #F6F8FE;
+    background-image:
+      radial-gradient(1200px 700px at 20% 10%, #E7EEFF 0%, rgba(231,238,255,0) 60%),
+      radial-gradient(900px 600px at 90% 90%, #EAF1FF 0%, rgba(234,241,255,0) 60%),
+      radial-gradient(circle, #C9D3EE 1.2px, transparent 1.4px);
+    background-size: auto, auto, 28px 28px;
+    background-position: 0 0, 0 0, 0 0;
+  }
+  .dotgrid-soft {
+    background-color: #FFFFFF;
+    background-image: radial-gradient(circle, #E3E8F4 1px, transparent 1.2px);
+    background-size: 28px 28px;
+  }
+
+  .frame {
+    position: absolute; inset: 0;
+    padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+    box-sizing: border-box;
+    display: flex; flex-direction: column;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--type-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .slide-title {
+    font-size: var(--type-title);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .slide-sub {
+    font-size: var(--type-subtitle);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--muted);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .body {
+    font-size: var(--type-body);
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  /* Pill chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    font-size: var(--type-small);
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .chip .dot {
+    width: 12px; height: 12px; border-radius: 999px; background: var(--blue);
+  }
+
+  /* ------- SLIDE 1: HERO ------- */
+  .hero {
+    position: relative;
+  }
+  .hero .frame { justify-content: center; }
+  .hero-mark {
+    display: inline-flex; align-items: center; gap: 18px;
+    margin-bottom: 48px;
+  }
+  .hero-mark .logo {
+    width: 72px; height: 72px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-mark .logo img { width: 100%; height: 100%; display: block; }
+  .hero-mark .label {
+    font-size: var(--type-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .hero h1 {
+    font-size: var(--type-display);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    margin: 0 0 36px;
+    color: var(--ink);
+    max-width: 1500px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--blue);
+  }
+  .hero .lede {
+    font-size: var(--type-subtitle);
+    color: var(--muted);
+    max-width: 1280px;
+    line-height: 1.25;
+    margin: 0;
+    font-weight: 400;
+  }
+  .hero-meta {
+    position: absolute;
+    bottom: var(--pad-bottom);
+    left: var(--pad-x);
+    right: var(--pad-x);
+    display: flex; justify-content: space-between; align-items: end;
+    color: var(--muted);
+  }
+  .hero-meta .mono { font-size: var(--type-mono); color: var(--ink-2); }
+
+  /* Floating cards on hero */
+  .hero-card {
+    position: absolute;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 30px 60px -20px rgba(20, 30, 80, 0.18), 0 8px 20px -8px rgba(20, 30, 80, 0.08);
+    padding: 22px 28px;
+    display: flex; align-items: center; gap: 16px;
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--ink);
+  }
+  .hero-card.pdf { top: 140px; right: 120px; transform: rotate(4deg); }
+  .hero-card.web { top: 320px; right: 220px; transform: rotate(-3deg); }
+  .hero-card.audio { top: 520px; right: 100px; transform: rotate(2deg); }
+
+  .hero-card .pill {
+    padding: 6px 12px; border-radius: 8px; font-size: 18px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em;
+  }
+
+  /* ------- SLIDE 2: GET STARTED ------- */
+  .browser {
+    background: #fff;
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+    box-shadow: 0 40px 80px -30px rgba(20, 30, 80, 0.18);
+    overflow: hidden;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .browser-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 16px 20px;
+    background: #F4F6FB;
+    border-bottom: 1px solid var(--line);
+  }
+  .browser-bar .traffic { display: flex; gap: 8px; }
+  .browser-bar .traffic span {
+    width: 14px; height: 14px; border-radius: 999px; background: #DDE3EF;
+  }
+  .browser-bar .url {
+    flex: 1; margin: 0 16px;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 10px 22px;
+    font-family: 'JetBrains Mono', monospace; font-size: 20px;
+    color: var(--ink-2);
+  }
+  .browser-bar .url b { color: var(--blue); font-weight: 600; }
+  .browser-body {
+    padding: 56px 64px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  /* ------- SLIDE 3: FEATURES ------- */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-top: 16px;
+  }
+  .feature {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 20px;
+    padding: 24px 26px 22px;
+    display: flex; flex-direction: column; gap: 12px;
+    min-height: 148px;
+  }
+  .feature .ic {
+    width: 56px; height: 56px; border-radius: 999px;
+    border: 2.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .feature .ic svg { width: 28px; height: 28px; }
+  .feature .name {
+    font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .feature .meta {
+    font-size: 19px; color: var(--muted); line-height: 1.35;
+  }
+  .feature.tall { grid-column: span 2; min-height: 168px; }
+
+  /* Section divider */
+  .section-eyebrow {
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: 42px;
+  }
+  .section-eyebrow .num {
+    width: 50px; height: 50px; border-radius: 14px;
+    background: var(--blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 22px;
+  }
+
+  /* ------- ROADMAP ------- */
+  .roadmap {
+    display: grid; grid-template-columns: 360px 1fr;
+    gap: 64px; align-items: start; margin-top: 12px;
+  }
+  .quarter-card {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 24px;
+    padding: 42px 40px;
+    position: sticky; top: 0;
+  }
+  .quarter-card .q-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 18px;
+  }
+  .quarter-card .q-num {
+    font-size: 100px; font-weight: 800; letter-spacing: -0.03em; line-height: 0.9;
+    color: #fff;
+  }
+  .quarter-card .q-year {
+    font-size: 36px; font-weight: 500; color: rgba(255,255,255,0.6);
+    margin-top: 12px;
+  }
+  .quarter-card .q-tag {
+    margin-top: 32px;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 18px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-size: 20px; color: #fff;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .quarter-card .q-tag .dot { width:10px;height:10px;border-radius:999px;background:#22C55E; }
+
+  .roadmap-list { display: flex; flex-direction: column; gap: 0; }
+  .roadmap-item {
+    display: grid; grid-template-columns: 64px 1fr;
+    gap: 28px; padding: 18px 0;
+    border-bottom: 1.5px solid var(--line);
+    align-items: start;
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-item .idx {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px; color: var(--muted); padding-top: 10px;
+    letter-spacing: 0.06em;
+  }
+  .roadmap-item .name {
+    font-size: 36px; font-weight: 600; color: var(--ink); letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+  .roadmap-item .blurb {
+    font-size: 22px; color: var(--muted); margin-top: 6px; line-height: 1.4;
+  }
+
+  /* ------- API KEY SLIDE ------- */
+  .key-slab {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 24px;
+    padding: 56px 60px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 56px; align-items: center;
+  }
+  .key-slab .label {
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.55);
+    font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .key-slab .key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 56px; font-weight: 600; letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .key-slab .sub {
+    font-size: 22px; color: rgba(255,255,255,0.6);
+    margin-top: 14px;
+  }
+  .key-cta {
+    background: var(--blue);
+    color: #fff;
+    padding: 22px 38px;
+    border-radius: 16px;
+    font-size: 28px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 14px;
+    border: none;
+  }
+  .warn-strip {
+    margin-top: 36px;
+    padding: 22px 28px;
+    border-left: 4px solid #F59E0B;
+    background: #FEF6E7;
+    color: #7A4F00;
+    font-size: 24px;
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* ------- GET KEY (CONTACT) SLIDE ------- */
+  .step {
+    display: grid; grid-template-columns: 100px 1fr;
+    gap: 36px; padding: 40px 0;
+    border-bottom: 1.5px solid var(--line);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 78px; height: 78px;
+    border-radius: 50%;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 36px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-title { font-size: 38px; font-weight: 600; color: var(--ink); letter-spacing: -0.015em; }
+  .step-body { font-size: 24px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+  .step-body b { color: var(--ink); font-weight: 600; }
+
+  /* Two-col helper */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .two-col-tight { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+
+  /* Partners strip */
+  .partners {
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 18px;
+  }
+  .partner {
+    padding: 14px 22px; border-radius: 12px;
+    background: #fff; border: 1.5px solid var(--line);
+    font-size: 22px; font-weight: 600; color: var(--ink);
+  }
+
+  /* Stat tiles */
+  .stat {
+    background: #fff; border: 1.5px solid var(--line);
+    border-radius: 20px; padding: 32px 32px;
+  }
+  .stat .num {
+    font-size: 84px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+    color: var(--ink);
+  }
+  .stat .num em { color: var(--blue); font-style: normal; }
+  .stat .lab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-top: 14px; font-weight: 600;
+  }
+
+  /* PDF→Web mock for hero */
+  .conversion-mock {
+    position: absolute;
+    right: 100px;
+    top: 220px;
+    width: 720px;
+    height: 700px;
+    pointer-events: none;
+  }
+
+  /* Browser-card mock for slide 2 */
+  .download-cta {
+    display: flex; gap: 22px; align-items: center;
+    margin-top: 12px;
+  }
+  .download-cta .btn {
+    padding: 22px 36px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 16px;
+    font-size: 26px; font-weight: 600;
+    display: inline-flex; gap: 14px; align-items: center;
+  }
+  .download-cta .btn.alt {
+    background: #fff; color: var(--ink);
+    border: 1.5px solid var(--line);
+  }
+  .download-cta .btn svg { width: 26px; height: 26px; }
+
+  .url-block {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 18px;
+    padding: 26px 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px; color: var(--ink);
+    display: flex; align-items: center; gap: 18px;
+  }
+  .url-block .scheme { color: var(--muted); }
+  .url-block .path { color: var(--blue); font-weight: 600; }
+</style>
+</head>
+<body style="font-family: Inter">
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ========== SLIDE 1: HERO ========== -->
+  <section data-label="01 Welcome" class="hero dotgrid">
+    <div class="frame">
+      <div class="hero-mark">
+        <div class="logo"><img src="favicon.svg" alt="ADT Studio" /></div>
+        <div class="label">ADT Studio &nbsp;·&nbsp; Beta</div>
+      </div>
+      <h1>Make any book <em>accessible</em>,<br/>with AI.</h1>
+      <p class="lede">Welcome to the ADT Studio Beta — drop in a PDF, get a fully accessible digital textbook.</p>
+
+      <div class="hero-meta">
+        <div class="mono">UNICEF · OpenAI · NEES · Ceibal</div>
+        <div class="mono">May 2026</div>
+      </div>
+    </div>
+
+    <!-- Floating cards -->
+    <div class="hero-card pdf">
+      <span class="pill" style="background:#FEE2E2;color:#DC2626;">PDF</span>
+      <span>Curriculum.pdf</span>
+    </div>
+    <div class="hero-card web">
+      <span class="pill" style="background:#DBEAFE;color:#2D5BFF;">WEB</span>
+      <span>Accessible Book</span>
+    </div>
+    <div class="hero-card audio">
+      <span class="pill" style="background:#DCFCE7;color:#16A34A;">TTS</span>
+      <span>EN · PT · ES</span>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 2: GET STARTED ========== -->
+  <section data-label="02 Get Started" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">01</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Get Started</div>
+      </div>
+
+      <h2 class="slide-title" style="margin-bottom: 24px;">Download the app.
+Star us on GitHub.</h2>
+
+      <div style="display:grid; grid-template-columns: 1.05fr 1fr; gap: 80px; margin-top: 56px; align-items:start;">
+        <div>
+          <div class="url-block" style="margin-bottom: 28px;">
+            <span class="scheme">https://</span><span>unicef.github.io</span><span style="color:var(--muted)">/</span><span class="path">adt-studio</span>
+          </div>
+          <p class="body" style="margin: 0 0 28px 0; max-width: 720px;">Open-source. Visit the landing page to download the desktop app, read the docs, or browse the code on GitHub.</p>
+          <div class="download-cta" style="margin-bottom: 24px;">
+            <span class="btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+              Download the app
+            </span>
+            <span class="btn alt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3"/><path d="M15 22v-3.9a3.4 3.4 0 0 0-.9-2.5c3-.3 6.1-1.5 6.1-6.6a5.1 5.1 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12.4 12.4 0 0 0-6.6 0C5 .9 3.9 1.2 3.9 1.2a4.7 4.7 0 0 0-.1 3.5 5.1 5.1 0 0 0-1.4 3.5c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-.9 2.5V22"/></svg>
+              View on GitHub
+            </span>
+          </div>
+          <div style="display:inline-flex; align-items:center; gap: 14px; padding: 16px 22px; background: #fff; border: 1.5px solid var(--line); border-radius: 14px;">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="#F59E0B" stroke="#F59E0B" stroke-width="1.6" stroke-linejoin="round"><polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/></svg>
+            <span style="font-size: 22px; color: var(--ink-2);">If you like it, give us a <b style="color:var(--ink);">Star on GitHub</b> ⭐</span>
+          </div>
+        </div>
+
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="traffic"><span></span><span></span><span></span></div>
+            <div class="url">unicef.github.io<b>/adt-studio</b></div>
+          </div>
+          <div class="browser-body" style="padding: 36px 44px; gap: 18px;">
+            <div style="display:flex; align-items:center; gap: 14px;">
+              <img src="favicon.svg" alt="" style="width:40px;height:40px;display:block;" />
+              <div class="mono" style="font-size: 18px; color: var(--ink);">ADT STUDIO</div>
+            </div>
+            <h3 style="font-size: 38px; font-weight: 700; margin: 18px 0 12px; letter-spacing:-0.02em; color: var(--ink); line-height:1.1;">From PDF to accessible book.</h3>
+            <p style="font-size: 19px; color: var(--muted); margin: 0; line-height: 1.45;">Open-source pipeline that turns curricular content into accessible web experiences.</p>
+            <div style="display:flex; gap: 12px; margin-top: 16px;">
+              <span style="padding: 12px 20px; background: var(--ink); color: #fff; border-radius: 10px; font-size: 18px; font-weight: 600;">Download</span>
+              <span style="padding: 12px 20px; background: #fff; color: var(--ink); border:1.5px solid var(--line); border-radius: 10px; font-size: 18px; font-weight: 600;">Documentation</span>
+            </div>
+
+            <!-- mini icon row -->
+            <div style="display:flex; justify-content: space-between; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line);">
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-extract);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">EXTRACT</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-storyboard);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">STORY</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-quizzes);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">QUIZ</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-captions);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">CAPTION</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-glossary);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">GLOSSARY</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-language);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">LANG</div></div>
+              <div style="text-align:center;"><div style="width:30px;height:30px;border:2px solid var(--c-speech);border-radius:999px;margin:0 auto 6px;"></div><div class="mono" style="font-size:11px;color:var(--muted);">SPEECH</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 4: FEATURES OVERVIEW ========== -->
+  <section data-label="04 Features" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">03</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Current Features</div>
+      </div>
+      <h2 class="slide-title" style="margin-bottom: 24px;">What's in the box.</h2>
+      <p class="slide-sub" style="font-size: 32px; max-width: 1200px; margin-bottom: 12px;">From PDF in, to fully accessible book out — every step covered.</p>
+
+      <div class="features-grid">
+        <!-- Inputs -->
+        <div class="feature" style="color: var(--c-extract);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+          <div class="name" style="color: var(--ink);">PDF import</div>
+          <div class="meta">Storybooks · textbooks · reference · math · activity books</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-language);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div class="name" style="color: var(--ink);">Translation</div>
+          <div class="meta">Text + images, any language pair</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-speech);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+          <div class="name" style="color: var(--ink);">Text-to-speech</div>
+          <div class="meta">Word-by-word highlighting</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-captions);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="name" style="color: var(--ink);">Auto image captions</div>
+          <div class="meta">Alt-text + AI image tools</div>
+        </div>
+
+        <!-- AI / generation -->
+        <div class="feature" style="color: var(--c-storyboard);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+          <div class="name" style="color: var(--ink);">AI layout generation</div>
+          <div class="meta">Accessible web layouts, semantic sections</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-quizzes);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg></div>
+          <div class="name" style="color: var(--ink);">Activity & answer gen</div>
+          <div class="meta">Quizzes, exercises, answer keys</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-glossary);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="name" style="color: var(--ink);">Glossary</div>
+          <div class="meta">Auto-built term definitions</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-contents);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1" fill="currentColor"/><circle cx="3.5" cy="12" r="1" fill="currentColor"/><circle cx="3.5" cy="18" r="1" fill="currentColor"/></svg></div>
+          <div class="name" style="color: var(--ink);">Table of contents</div>
+          <div class="meta">Generated, accessible nav</div>
+        </div>
+
+        <!-- Math -->
+        <div class="feature" style="color: var(--c-extract);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14"/><path d="M5 19l7-7-7-7"/><path d="M14 14l5 5"/><path d="M19 14l-5 5"/></svg></div>
+          <div class="name" style="color: var(--ink);">Math equations</div>
+          <div class="meta">MathML, accessibly rendered</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-storyboard);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
+          <div class="name" style="color: var(--ink);">LLM-agnostic</div>
+          <div class="meta">Bring your own model</div>
+        </div>
+
+        <div class="feature" style="color: var(--c-glossary);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="name" style="color: var(--ink);">Validation</div>
+          <div class="meta">Accessibility · evaluation · human review</div>
+        </div>
+
+        <!-- Outputs -->
+        <div class="feature" style="color: var(--c-preview);">
+          <div class="ic" style="border-radius: 14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/><path d="M20 17l-3-3m0 6l3-3"/></svg></div>
+          <div class="name" style="color: var(--ink);">Export anywhere</div>
+          <div class="meta">Web · WebPub · SCORM (offline)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 5: ROADMAP Q2 ========== -->
+  <section data-label="05 Roadmap Q2" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">04</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
+      </div>
+      <h2 class="slide-title" style="margin-bottom: 16px;">Coming this quarter.</h2>
+
+      <div class="roadmap" style="margin-top: 32px;">
+        <div class="quarter-card">
+          <div class="q-label">Quarter</div>
+          <div class="q-num">Q2</div>
+          <div class="q-year">2026</div>
+          <div class="q-tag"><span class="dot"></span>In progress</div>
+        </div>
+
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <div class="idx">01</div>
+            <div>
+              <div class="name">ePub export</div>
+              <div class="blurb">Reflowable accessible ePub alongside Web and SCORM.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">02</div>
+            <div>
+              <div class="name">Fixed-layout overlay books</div>
+              <div class="blurb">Preserve original page design with an accessibility overlay.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">03</div>
+            <div>
+              <div class="name">Improved storyboard editor</div>
+              <div class="blurb">Better chat-based and direct-manipulation editing for layout, image and section flow.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">04</div>
+            <div>
+              <div class="name">UI/UX updates and documentation</div>
+              <div class="blurb">Refreshed app surface and expanded user guides.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">05</div>
+            <div>
+              <div class="name">Editable activities</div>
+              <div class="blurb">Author and tweak quizzes, drag-drop, and exercises in-app.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">06</div>
+            <div>
+              <div class="name">Translation evaluation</div>
+              <div class="blurb">Quality scoring + side-by-side review for translated content.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 6: ROADMAP Q3/Q4 ========== -->
+  <section data-label="06 Roadmap Q3 Q4" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">05</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
+      </div>
+      <h2 class="slide-title" style="margin-bottom: 16px;">Later this year.</h2>
+
+      <div class="roadmap" style="margin-top: 32px;">
+        <div class="quarter-card" style="background: linear-gradient(180deg, #1E3FB8 0%, #2D5BFF 100%);">
+          <div class="q-label" style="color: rgba(255,255,255,0.7);">Quarters</div>
+          <div class="q-num">Q3 · Q4</div>
+          <div class="q-year">2026</div>
+          <div class="q-tag" style="background: rgba(255,255,255,0.15);"><span class="dot" style="background:#FCD34D;"></span>Planned</div>
+        </div>
+
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <div class="idx">01</div>
+            <div>
+              <div class="name">Country implementation support</div>
+              <div class="blurb">Support and optimizations for ministries converting national curricula at scale.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">02</div>
+            <div>
+              <div class="name">Sovereign model integration</div>
+              <div class="blurb">Run end-to-end on local or country-hosted models — no data leaves the country.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">03</div>
+            <div>
+              <div class="name">More accents & localization</div>
+              <div class="blurb">Expanded TTS voices and locale-aware UI.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">04</div>
+            <div>
+              <div class="name">Content differentiation</div>
+              <div class="blurb">Leveling, contents adaptations, ELI5, and transformations for diverse learners.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">05</div>
+            <div>
+              <div class="name">Sign language AI <span style="font-size:18px; color: var(--blue); font-family:'JetBrains Mono',monospace; letter-spacing:0.1em; margin-left:10px; vertical-align: middle;">R&amp;D</span></div>
+              <div class="blurb">Research into AI-generated sign language interpretation alongside ASL/LIBRAS.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">06</div>
+            <div>
+              <div class="name">Expanded template library</div>
+              <div class="blurb">Ready-made layouts for storybooks, textbooks, references and activity sets.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 7: WORKSHOP API KEY ========== -->
+  <section data-label="07 Workshop Key" class="dotgrid">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">06</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">For Today's Workshop</div>
+      </div>
+
+      <h2 class="slide-title" style="margin-bottom: 24px;">Use this key to follow along.</h2>
+      <p class="slide-sub" style="font-size: 32px; max-width: 1200px; margin-bottom: 56px;">A temporary API key is provisioned for everyone in the room.</p>
+
+      <div class="key-slab">
+        <div style="height: 190px; width: 1313px">
+          <div class="label">Workshop API Key</div>
+          <div class="key" style="width: 1334px; font-size: 26px">sk-proj-_______________________________________________________________________</div>
+          <div class="sub">Paste into Settings → API Keys when ADT Studio launches.</div>
+        </div>
+        <div class="key-cta" style="padding: 22.9609px 38px 22px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy key
+        </div>
+      </div>
+
+      <div class="warn-strip">
+        <b>Workshop only.</b> &nbsp;This key expires at the end of the session — for ongoing use, request your own on the next slide.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 8: GET YOUR OWN KEY ========== -->
+  <section data-label="08 Request Key" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">07</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">After the Workshop</div>
+      </div>
+
+      <h2 class="slide-title" style="margin-bottom: 24px;">Get your own API key.</h2>
+      <p class="slide-sub" style="font-size: 32px; max-width: 1200px; margin-bottom: 32px;">Two steps. Quick turnaround.</p>
+
+      <div style="margin-top: 24px;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">Email us.</div>
+            <div class="step-body">Send a short note describing your team and use case to <b>econstantopedos@unicef.org</b> and <b>smudzingwa@unicef.org</b>. We'll send you a request form.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Fill out the form.</div>
+            <div class="step-body">Once submitted, your key is provisioned and shared back over email — usually within a few business days.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Start converting.</div>
+            <div class="step-body">Paste it into ADT Studio, drop in your first PDF, and ship an accessible book.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 56px; display:flex; gap: 16px; align-items:center;">
+        <div class="mono" style="color: var(--muted); font-size: var(--type-mono);">Thank you</div>
+        <div style="height: 2px; flex:1; background: var(--line);"></div>
+        <div class="mono" style="color: var(--ink); font-size: var(--type-mono);">UNICEF · OPENAI</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 9: SUBMITTING ISSUES ========== -->
+  <section data-label="09 Issues" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">08</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Feedback</div>
+      </div>
+
+      <h2 class="slide-title" style="margin-bottom: 24px;">Submitting issues.</h2>
+      <p class="slide-sub" style="font-size: 32px; max-width: 1300px; margin-bottom: 56px;">Reach out with bugs and feature requests, or open an issue on the open-source GitHub project.</p>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 24px;">
+        <div style="background:#fff; border:1.5px solid var(--line); border-radius: 24px; padding: 44px 44px;">
+          <div style="display:flex; align-items:center; gap:18px; margin-bottom: 24px;">
+            <div style="width:64px;height:64px;border-radius:16px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="mono" style="font-size: 18px; color: var(--muted);">Email</div>
+              <div style="font-size: 32px; font-weight: 700; color: var(--ink); letter-spacing:-0.015em;">Reach out directly to regional lead</div>
+            </div>
+          </div>
+          <div style="font-size: 26px; color: var(--ink-2); line-height:1.5; font-family:'JetBrains Mono', monospace;">
+            <div style="margin-bottom: 8px;">econstantopedos@unicef.org</div>
+            <div>gbergengruen@unicef.org</div>
+          </div>
+          <p class="body" style="font-size:22px; margin: 24px 0 0; color: var(--muted);">For quick questions, issues with installation, or support.</p>
+        </div>
+
+        <div style="background:var(--ink); color:#fff; border-radius: 24px; padding: 44px 44px;">
+          <div style="display:flex; align-items:center; gap:18px; margin-bottom: 24px;">
+            <div style="width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,0.1);color:#fff;display:flex;align-items:center;justify-content:center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3"/><path d="M15 22v-3.9a3.4 3.4 0 0 0-.9-2.5c3-.3 6.1-1.5 6.1-6.6a5.1 5.1 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12.4 12.4 0 0 0-6.6 0C5 .9 3.9 1.2 3.9 1.2a4.7 4.7 0 0 0-.1 3.5 5.1 5.1 0 0 0-1.4 3.5c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-.9 2.5V22"/></svg>
+            </div>
+            <div>
+              <div class="mono" style="font-size: 18px; color: rgba(255,255,255,0.55);">GitHub</div>
+              <div style="font-size: 32px; font-weight: 700; color: #fff; letter-spacing:-0.015em;">Open an issue</div>
+            </div>
+          </div>
+          <div style="font-size: 24px; color: #fff; line-height:1.5; font-family:'JetBrains Mono', monospace;">
+            github.com/unicef/<span style="color:#7DD3FC;">adt-studio</span>/issues
+          </div>
+          <p style="font-size:22px; margin: 24px 0 0; color: rgba(255,255,255,0.6); line-height:1.5;">Bug reports, feature requests, and contributions welcome — it's open source.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 48px; display:flex; gap: 16px; align-items:center;">
+        <div class="mono" style="color: var(--ink); font-size: var(--type-mono);">Thank you</div>
+        <div style="height: 2px; flex:1; background: var(--line);"></div>
+        <div class="mono" style="color: var(--muted); font-size: var(--type-mono);">UNICEF · OPENAI</div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script src="deck-stage.js"></script>
+</body>
+</html>
