@@ -340,6 +340,68 @@
   .roadmap-item .blurb {
     font-size: 22px; color: var(--muted); margin-top: 6px; line-height: 1.4;
   }
+  /* Denser variant for lists with 7 items */
+  .roadmap-list.dense .roadmap-item { padding: 11px 0; }
+  .roadmap-list.dense .roadmap-item .idx { padding-top: 7px; }
+  .roadmap-list.dense .roadmap-item .name { font-size: 32px; }
+  .roadmap-list.dense .roadmap-item .blurb { font-size: 21px; }
+
+  /* Status pill on roadmap items */
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 14px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    vertical-align: middle; margin-left: 16px;
+    border: 1.5px solid; line-height: 1;
+    position: relative; top: -2px;
+  }
+  .status .dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+  .status.done     { color: #15803D; border-color: #BBF7D0; background: #F0FDF4; }
+  .status.done .dot     { background: #22C55E; }
+  .status.progress { color: #1E40AF; border-color: #C7D7FF; background: #EEF3FF; }
+  .status.progress .dot { background: #2D5BFF; }
+  .status.qa       { color: #B45309; border-color: #FDE68A; background: #FFFBEB; }
+  .status.qa .dot       { background: #F59E0B; }
+
+  /* ------- ROADMAP INTRO (horizons) ------- */
+  .horizon-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 8px;
+  }
+  .horizon {
+    border-radius: 24px; padding: 40px 38px; color: #fff;
+    display: flex; flex-direction: column; min-height: 300px;
+  }
+  .horizon .h-when {
+    font-family: 'JetBrains Mono', monospace; font-size: 20px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 18px;
+  }
+  .horizon .h-q { font-size: 64px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .horizon .h-year { font-size: 26px; color: rgba(255,255,255,0.7); margin-top: 12px; }
+  .horizon .h-focus { font-size: 22px; color: rgba(255,255,255,0.82); margin-top: 18px; line-height: 1.4; }
+  .horizon .h-tag {
+    margin-top: auto; display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+    padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,0.14);
+    font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .horizon .h-tag .dot { width: 9px; height: 9px; border-radius: 999px; }
+
+  /* ------- PRIORITY USER FEEDBACK GRID ------- */
+  .feedback-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 8px;
+  }
+  .fb-card {
+    background: #fff; border: 1.5px solid var(--line); border-radius: 20px;
+    padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .fb-card .ic {
+    width: 58px; height: 58px; border-radius: 16px;
+    border: 2.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .fb-card .ic svg { width: 30px; height: 30px; }
+  .fb-card .fb-name { font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; line-height: 1.12; }
+  .fb-card .fb-desc { font-size: 20px; color: var(--muted); line-height: 1.4; }
 
   /* ------- API KEY SLIDE ------- */
   .key-slab {
@@ -667,11 +729,97 @@ Star us on GitHub.</h2>
     </div>
   </section>
 
-  <!-- ========== SLIDE 5: ROADMAP Q2 ========== -->
-  <section data-label="05 Roadmap Q2" class="dotgrid-soft">
+  <!-- ========== SLIDE 5: ROADMAP INTRO ========== -->
+  <section data-label="05 Roadmap" class="dotgrid">
     <div class="frame">
       <div class="section-eyebrow">
         <div class="num">04</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
+      </div>
+      <h2 class="slide-title" style="font-size: 96px; margin-bottom: 28px;">Roadmap.</h2>
+      <p class="slide-sub" style="max-width: 1320px; margin-bottom: 56px;">What we're building next — and why. Priorities shaped directly by country pilots and the user community, delivered across three horizons.</p>
+
+      <div class="horizon-row">
+        <div class="horizon" style="background: var(--ink);">
+          <div class="h-when">Now</div>
+          <div class="h-q">Q2</div>
+          <div class="h-year">2026</div>
+          <div class="h-focus">Export formats, editing and template foundations.</div>
+          <div class="h-tag"><span class="dot" style="background:#22C55E;"></span>In progress</div>
+        </div>
+        <div class="horizon" style="background: linear-gradient(180deg, #1E3FB8 0%, #2D5BFF 100%);">
+          <div class="h-when">This year</div>
+          <div class="h-q">Q3 · Q4</div>
+          <div class="h-year">2026</div>
+          <div class="h-focus">Country scale, sovereignty, localization and differentiation.</div>
+          <div class="h-tag"><span class="dot" style="background:#FCD34D;"></span>Planned</div>
+        </div>
+        <div class="horizon" style="background: linear-gradient(180deg, #7C3AED 0%, #A855F7 100%);">
+          <div class="h-when">Next year</div>
+          <div class="h-q">2027</div>
+          <div class="h-year">&amp; beyond</div>
+          <div class="h-focus">Teacher-centered upskilling and AI personalization.</div>
+          <div class="h-tag"><span class="dot" style="background:#FCD34D;"></span>Future</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 6: PRIORITY USER FEEDBACK ========== -->
+  <section data-label="06 Priority Feedback" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">05</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">What We Heard</div>
+      </div>
+      <h2 class="slide-title" style="margin-bottom: 16px;">Priority user feedback.</h2>
+      <p class="slide-sub" style="font-size: 32px; max-width: 1320px; margin-bottom: 28px;">As communicated by country pilots and the user community — the signals shaping what we build.</p>
+
+      <div class="feedback-grid">
+        <div class="fb-card" style="color: var(--c-extract);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="1.4" fill="currentColor" stroke="none"/><path d="M5 9c2 1 4.5 1.5 7 1.5S17 10 19 9"/><path d="M12 10.5V16"/><path d="m9 20 3-4 3 4"/></svg></div>
+          <div class="fb-name">Accessibility throughout</div>
+          <div class="fb-desc">Pilots showed the tool itself must be accessible. A blind user should open ADT Studio, upload a PDF and get a WCAG-compliant output — useful and reputationally vital.</div>
+        </div>
+
+        <div class="fb-card" style="color: var(--c-quizzes);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></div>
+          <div class="fb-name">Flexible activity creation</div>
+          <div class="fb-desc">Interactive activities that are easy to generate, convert and edit. Every education-publishing stakeholder wants a simpler path to editable activities.</div>
+        </div>
+
+        <div class="fb-card" style="color: var(--c-storyboard);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+          <div class="fb-name">Brand consistency</div>
+          <div class="fb-desc">Control fonts and branded elements so outputs match the existing style of already-published material.</div>
+        </div>
+
+        <div class="fb-card" style="color: var(--c-captions);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+          <div class="fb-name">Matched to learning outcomes</div>
+          <div class="fb-desc">Pedagogy and curriculum teams want to see how generated assets map to target learning outcomes — uploading the curriculum to give the system more context.</div>
+        </div>
+
+        <div class="fb-card" style="color: var(--c-glossary);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+          <div class="fb-name">Tracking learning progress</div>
+          <div class="fb-desc">Beyond SCORM/LMS sync or downloadable results, teachers need a simple way to understand and track learner progress.</div>
+        </div>
+
+        <div class="fb-card" style="color: var(--c-language);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+          <div class="fb-name">Modular conversion</div>
+          <div class="fb-desc">Break large textbooks into chapters — work one chapter at a time, or export smaller components.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 7: ROADMAP Q2 ========== -->
+  <section data-label="07 Roadmap Q2" class="dotgrid-soft">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">06</div>
         <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
       </div>
       <h2 class="slide-title" style="margin-bottom: 16px;">Coming this quarter.</h2>
@@ -684,46 +832,53 @@ Star us on GitHub.</h2>
           <div class="q-tag"><span class="dot"></span>In progress</div>
         </div>
 
-        <div class="roadmap-list">
+        <div class="roadmap-list dense">
           <div class="roadmap-item">
             <div class="idx">01</div>
             <div>
-              <div class="name">ePub export</div>
+              <div class="name">ePub export <span class="status qa"><span class="dot"></span>Needs QA</span></div>
               <div class="blurb">Reflowable accessible ePub alongside Web and SCORM.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">02</div>
             <div>
-              <div class="name">Fixed-layout overlay books</div>
+              <div class="name">Fixed-layout overlay books <span class="status done"><span class="dot"></span>Done</span></div>
               <div class="blurb">Preserve original page design with an accessibility overlay.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">03</div>
             <div>
-              <div class="name">Improved storyboard editor</div>
-              <div class="blurb">Better chat-based and direct-manipulation editing for layout, image and section flow.</div>
+              <div class="name">Standardized compliant presets <span class="status progress"><span class="dot"></span>In progress</span></div>
+              <div class="blurb">WCAG-compliant layout presets that turn messy, non-standard source PDFs into consistently accessible books.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">04</div>
             <div>
-              <div class="name">UI/UX updates and documentation</div>
-              <div class="blurb">Refreshed app surface and expanded user guides.</div>
+              <div class="name">Improved storyboard editor <span class="status progress"><span class="dot"></span>In progress</span></div>
+              <div class="blurb">Better chat-based and direct-manipulation editing for layout, image and section flow.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">05</div>
             <div>
-              <div class="name">Editable activities</div>
-              <div class="blurb">Author and tweak quizzes, drag-drop, and exercises in-app.</div>
+              <div class="name">UI/UX updates and documentation <span class="status progress"><span class="dot"></span>In progress</span></div>
+              <div class="blurb">Refreshed app surface and expanded user guides.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">06</div>
             <div>
-              <div class="name">Translation evaluation</div>
+              <div class="name">Editable activities <span class="status progress"><span class="dot"></span>In progress</span></div>
+              <div class="blurb">Author and tweak quizzes, drag-drop, and exercises in-app.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">07</div>
+            <div>
+              <div class="name">Translation evaluation <span class="status qa"><span class="dot"></span>Needs QA</span></div>
               <div class="blurb">Quality scoring + side-by-side review for translated content.</div>
             </div>
           </div>
@@ -732,11 +887,11 @@ Star us on GitHub.</h2>
     </div>
   </section>
 
-  <!-- ========== SLIDE 6: ROADMAP Q3/Q4 ========== -->
-  <section data-label="06 Roadmap Q3 Q4" class="dotgrid-soft">
+  <!-- ========== SLIDE 8: ROADMAP Q3/Q4 ========== -->
+  <section data-label="08 Roadmap Q3 Q4" class="dotgrid-soft">
     <div class="frame">
       <div class="section-eyebrow">
-        <div class="num">05</div>
+        <div class="num">07</div>
         <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
       </div>
       <h2 class="slide-title" style="margin-bottom: 16px;">Later this year.</h2>
@@ -753,7 +908,7 @@ Star us on GitHub.</h2>
           <div class="roadmap-item">
             <div class="idx">01</div>
             <div>
-              <div class="name">Country implementation support</div>
+              <div class="name">Country implementation support <span class="status progress"><span class="dot"></span>In progress</span></div>
               <div class="blurb">Support and optimizations for ministries converting national curricula at scale.</div>
             </div>
           </div>
@@ -767,14 +922,14 @@ Star us on GitHub.</h2>
           <div class="roadmap-item">
             <div class="idx">03</div>
             <div>
-              <div class="name">More accents & localization</div>
+              <div class="name">More accents & localization <span class="status progress"><span class="dot"></span>In progress</span></div>
               <div class="blurb">Expanded TTS voices and locale-aware UI.</div>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="idx">04</div>
             <div>
-              <div class="name">Content differentiation</div>
+              <div class="name">Content differentiation <span class="status progress"><span class="dot"></span>In progress</span></div>
               <div class="blurb">Leveling, contents adaptations, ELI5, and transformations for diverse learners.</div>
             </div>
           </div>
@@ -797,11 +952,63 @@ Star us on GitHub.</h2>
     </div>
   </section>
 
-  <!-- ========== SLIDE 7: WORKSHOP API KEY ========== -->
-  <section data-label="07 Workshop Key" class="dotgrid">
+  <!-- ========== SLIDE 9: ROADMAP 2027 — TEACHERS ========== -->
+  <section data-label="09 Roadmap 2027" class="dotgrid-soft">
     <div class="frame">
       <div class="section-eyebrow">
-        <div class="num">06</div>
+        <div class="num">08</div>
+        <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Roadmap</div>
+      </div>
+      <h2 class="slide-title" style="margin-bottom: 16px;">Putting the tool in teachers' hands.</h2>
+      <p class="slide-sub" style="font-size: 30px; max-width: 1200px; margin: 0 0 8px;">Teacher-centered upskilling — the phase after systems and educators.</p>
+
+      <div class="roadmap" style="margin-top: 28px;">
+        <div class="quarter-card" style="background: linear-gradient(180deg, #7C3AED 0%, #A855F7 100%);">
+          <div class="q-label" style="color: rgba(255,255,255,0.7);">Next year</div>
+          <div class="q-num">2027</div>
+          <div class="q-year">&amp; beyond</div>
+          <div class="q-tag" style="background: rgba(255,255,255,0.15);"><span class="dot" style="background:#FCD34D;"></span>Future</div>
+        </div>
+
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <div class="idx">01</div>
+            <div>
+              <div class="name">Teacher-facing ADT Studio</div>
+              <div class="blurb">A simplified tool so teachers adapt and localize materials directly — the just-in-time content central production can't cover.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">02</div>
+            <div>
+              <div class="name">Teacher professional development</div>
+              <div class="blurb">Video trainings plus global and local workshops, delivered through an established teacher-training model.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">03</div>
+            <div>
+              <div class="name">Teacher-led adaptation &amp; ownership</div>
+              <div class="blurb">Quality control and a human imprint move closer to the classroom, where ministries and teachers want ownership.</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="idx">04</div>
+            <div>
+              <div class="name">AI-personalized materials <span style="font-size:18px; color:#7C3AED; font-family:'JetBrains Mono',monospace; letter-spacing:0.1em; margin-left:10px; vertical-align: middle;">HORIZON</span></div>
+              <div class="blurb">Connect AI directly to the accessible materials so teachers and students personalize them to individual needs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SLIDE 10: WORKSHOP API KEY ========== -->
+  <section data-label="10 Workshop Key" class="dotgrid">
+    <div class="frame">
+      <div class="section-eyebrow">
+        <div class="num">09</div>
         <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">For Today's Workshop</div>
       </div>
 
@@ -826,11 +1033,11 @@ Star us on GitHub.</h2>
     </div>
   </section>
 
-  <!-- ========== SLIDE 8: GET YOUR OWN KEY ========== -->
-  <section data-label="08 Request Key" class="dotgrid-soft">
+  <!-- ========== SLIDE 11: GET YOUR OWN KEY ========== -->
+  <section data-label="11 Request Key" class="dotgrid-soft">
     <div class="frame">
       <div class="section-eyebrow">
-        <div class="num">07</div>
+        <div class="num">10</div>
         <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">After the Workshop</div>
       </div>
 
@@ -869,11 +1076,11 @@ Star us on GitHub.</h2>
     </div>
   </section>
 
-  <!-- ========== SLIDE 9: SUBMITTING ISSUES ========== -->
-  <section data-label="09 Issues" class="dotgrid-soft">
+  <!-- ========== SLIDE 12: SUBMITTING ISSUES ========== -->
+  <section data-label="12 Issues" class="dotgrid-soft">
     <div class="frame">
       <div class="section-eyebrow">
-        <div class="num">08</div>
+        <div class="num">11</div>
         <div class="mono" style="color:var(--muted); font-size: var(--type-mono);">Feedback</div>
       </div>
 
