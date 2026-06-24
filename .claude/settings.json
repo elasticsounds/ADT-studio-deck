@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(command -v chromium-browser chrome google-chrome \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\")",
+      "Read(//var/folders/xk/qxgj02n57k37_4lw_kmtxc3w0000gn/T/**)",
+      "Read(//private/var/folders/xk/qxgj02n57k37_4lw_kmtxc3w0000gn/T/**)"
+    ]
+  }
+}
